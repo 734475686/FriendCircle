@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.List;
 import razerdp.friendcircle.R;
 import razerdp.github.com.baseuilib.baseadapter.BaseRecyclerViewAdapter;
 import razerdp.github.com.baseuilib.baseadapter.BaseRecyclerViewHolder;
+import razerdp.github.com.baseuilib.widget.common.ClickShowMoreLayout;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class TestActivity extends AppCompatActivity {
 
     private void initView() {
         rvContent = (RecyclerView) findViewById(R.id.rv_content);
-
+        rvContent.setLayoutManager(new LinearLayoutManager(this));
         final InnerAdapter adapter=new InnerAdapter(this,getTestDatas());
 
         rvContent.setAdapter(adapter);
@@ -87,14 +89,17 @@ public class TestActivity extends AppCompatActivity {
 
     private class InnerViewHolder extends BaseRecyclerViewHolder<String> {
 
+        ClickShowMoreLayout clickShowMoreLayout;
+
 
         public InnerViewHolder(View itemView, int viewType) {
             super(itemView, viewType);
+            clickShowMoreLayout= (ClickShowMoreLayout) findViewById(R.id.click_show_more_test);
         }
 
         @Override
         public void onBindData(String data, int position) {
-
+            clickShowMoreLayout.setText(data);
         }
     }
 }
