@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +34,11 @@ public class TestActivity extends AppCompatActivity {
     private void initView() {
         rvContent = (RecyclerView) findViewById(R.id.rv_content);
         rvContent.setLayoutManager(new LinearLayoutManager(this));
-        final InnerAdapter adapter=new InnerAdapter(this,getTestDatas());
+        final InnerAdapter adapter = new InnerAdapter(this, getTestDatas());
 
         rvContent.setAdapter(adapter);
 
-        Button refresh= (Button) findViewById(R.id.refresh);
+        Button refresh = (Button) findViewById(R.id.refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,21 +47,25 @@ public class TestActivity extends AppCompatActivity {
         });
     }
 
-    private List<String> getTestDatas(){
-        List<String> testData=new ArrayList<>();
+    private List<String> getTestDatas() {
+        List<String> testData = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            testData.add("Almost heaven, West Virginia，\n" +
-                                 "西弗吉尼亚，近乎天堂般美妙\n" +
-                                 "Blue Ridge Mountains, Shenandoah River.\n" +
-                                 "蓝岭山脉，珊娜多荷河流\n" +
-                                 "Life is old there, older than the trees,\n" +
-                                 "那里的生命，比树木更古老\n" +
-                                 "Younger than the mountains, blowing like a breeze.\n" +
-                                 "比青山更有活力，像风一样自由\n" +
-                                 "Country road, take me home\n" +
-                                 "故乡的路，带我回家吧\n" +
-                                 "To the place I belong,\n" +
-                                 "回到我的家乡");
+            if (i % 2 != 0) {
+                testData.add("Almost heaven, West Virginia，\n" +
+                        "西弗吉尼亚，近乎天堂般美妙\n" +
+                        "Blue Ridge Mountains, Shenandoah River.\n" +
+                        "蓝岭山脉，珊娜多荷河流\n" +
+                        "Life is old there, older than the trees,\n" +
+                        "那里的生命，比树木更古老\n" +
+                        "Younger than the mountains, blowing like a breeze.\n" +
+                        "比青山更有活力，像风一样自由\n" +
+                        "Country road, take me home\n" +
+                        "故乡的路，带我回家吧\n" +
+                        "To the place I belong,\n" +
+                        "回到我的家乡");
+            } else {
+                testData.add("短文字\n短文字\n短文字\n短文字\n短文字");
+            }
         }
         return testData;
     }
@@ -94,12 +100,21 @@ public class TestActivity extends AppCompatActivity {
 
         public InnerViewHolder(View itemView, int viewType) {
             super(itemView, viewType);
-            clickShowMoreLayout= (ClickShowMoreLayout) findViewById(R.id.click_show_more_test);
+            clickShowMoreLayout = (ClickShowMoreLayout) findViewById(R.id.click_show_more_test);
+            clickShowMoreLayout.setOnStateKeyGenerateListener(mOnStateKeyGenerateListener);
         }
 
         @Override
         public void onBindData(String data, int position) {
             clickShowMoreLayout.setText(data);
         }
+
+        private ClickShowMoreLayout.OnStateKeyGenerateListener mOnStateKeyGenerateListener = new ClickShowMoreLayout.OnStateKeyGenerateListener() {
+            @Override
+            public int onStateKeyGenerated(int originKey) {
+                KLog.i("originKey  >>  "+originKey);
+                return originKey + getLayoutPosition();
+            }
+        };
     }
 }
